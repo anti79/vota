@@ -1,0 +1,54 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+<form method="post" asp-action="CreateSave">
+	<h1>Информация</h1>
+	<div class="mb-3">
+		<label for="Name" class="form-label">Название</label><input class="form-control" name="Name" />
+		<label for="Description" class="form-label">Описание</label><textarea class="form-control" name="Description"></textarea>
+		<label for="StartTime" class="form-label">Начало голосования</label><input class="form-control" name="StartTime" type="datetime-local" />
+		<label for="EndTime" class="form-label">Конец голосования</label><input class="form-control" name="EndTime" type="datetime-local" />
+	</div>
+
+
+
+
+	<h1>Варианты</h1>
+	<button class="btn btn-primary" id="add-option-btn">Добавить вариант</button>
+	<ul class="list-group" id="options-list">
+	</ul>
+	
+	<input type="submit" class="btn btn-success" id="save-btn" value="Сохранить голосование" asp-controller="Admin" asp-action="CreateSave"/>
+	<input type="hidden" value="0" id="OptionsCount"  name="OptionsCount"/>
+
+</form>
+<script>
+	var options = 0;
+	$(document).ready(function () {
+		
+
+
+		$("#add-option-btn").click((event) => {
+
+			let option = `
+			<div class="container card list-group-item mt-2 mb-2" >
+				<div class="row mt-3 mb-3 ml-2 mr-2">
+					<div class="col-sm-9">
+						<input class="mt-3 mb-3 form-control" placeholder='Название' name="name`+ options.toString() + `"/>
+						<textarea class="text-muted small form-control" placeholder='Описание' name="description`+ options.toString() + `"></textarea>
+					</div>
+				</div>
+			</div >
+		`;
+
+			event.preventDefault();
+			$("#options-list").append("<li>" + option + "</li>");
+			options++;
+			$("#OptionsCount").val(options);
+		});
+	});
+
+</script>

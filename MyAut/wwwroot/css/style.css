@@ -1,0 +1,30 @@
+﻿.big-number {
+	font-size: xx-large;
+}
+.stat {
+	margin: 2%;
+	text-align:center;
+}
+.stat p {
+	margin-top:auto;
+}
+.dot {
+	height: 60px;
+	width: 60px;
+	background-color: white;
+	border: 2px solid gray;
+	border-radius: 50%;
+	display: inline-block;
+	text-align: center;
+}
+
+.symbol {
+	margin-top: -43px;
+	margin-left: 6px;
+	font-size: 70px;
+	position: absolute;
+	color:forestgreen;
+}
+.radio-big {
+	width:50px;
+}
