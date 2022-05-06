@@ -42,12 +42,21 @@ protected override void OnModelCreating(ModelBuilder builder)
 		public IQueryable<Poll> GetCurrent()
 		{
             var all = Polls;
-            return all.Where(p => p.StartTime < DateTime.Now && p.EndTime > DateTime.Now);
+            return all.Where(p => (p.StartTime < DateTime.Now && p.EndTime > DateTime.Now )||(p.StartTime==null&&p.EndTime==null));
 		}
         public IQueryable<Poll> GetOld()
         {
             var all = Polls;
             return all.Where(p => p.EndTime < DateTime.Now);
+        }
+        public bool UserHasVoted(string userId, int pollId)
+		{
+            var poll = Polls.Where(p => p.Id == pollId).FirstOrDefault();
+            return poll.Votes.Where(v => v.UserId == userId).Any();
+		}
+        public bool UserHasVoted(string userId, Poll poll)
+        {
+            return poll.Votes.Where(v => v.UserId == userId).Any();
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -55,7 +64,7 @@ protected override void OnModelCreating(ModelBuilder builder)
             builder.AddJsonFile("appsettings.json");
             var config = builder.Build();
             string connectionString = config.GetConnectionString("DefaultConnection");
-
+            optionsBuilder.UseLazyLoadingProxies();
             optionsBuilder.UseSqlServer(connectionString);
 
         }

@@ -30,9 +30,13 @@ namespace MyAut.Models
 		{
 			get
 			{
-				if (StartTime < DateTime.Now && EndTime > DateTime.Now) return Status.Active;
+				if((StartTime == null && EndTime == null)) return Status.Active;
 				if (EndTime < DateTime.Now) return Status.Over;
-				return Status.Planned;
+				if (StartTime > DateTime.Now) return Status.Planned;
+				if (StartTime < DateTime.Now && EndTime > DateTime.Now) return Status.Active;
+				return Status.Active;
+				
+				
 			}
 		}
 	}

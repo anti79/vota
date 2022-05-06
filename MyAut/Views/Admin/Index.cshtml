@@ -43,7 +43,7 @@ mog'sus
 		}
 	</tbody>
 </table>
-<a href="Admin/Create" class="btn btn-primary">Создать новое голосование</a>
+<a href="Admin/Create" class="btn btn-success">Создать новое голосование</a>
 
 
 <div class="modal" tabindex="-1" id="delete-modal">
@@ -77,15 +77,11 @@ mog'sus
 					body: id
 				})
 					.then((response) => {
-						console.log(response);
-						console.log(response.json());
-						console.log(response.text());
 						if (response.status == 200) {
-							alert("Room deleteed successfully");
 							document.location.reload();
 						}
 						else {
-							alert("Error deleting room");
+							alert("Ошибка при удалении голосования: " + response.status + " " + response.statusText);
 						}
 					})
 					.then((data) => {

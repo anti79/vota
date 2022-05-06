@@ -45,13 +45,12 @@ namespace MyAut.Controllers
 
 			context.Polls.Add(poll);
 			context.SaveChanges();
-			return Index();
+			return RedirectToAction("Index");
 		}
 		[HttpPost("Admin/Delete/{id}")]
 		public IActionResult Delete(int id)
 		{
 			var poll = context.Polls.Where(p => p.Id == id).FirstOrDefault();
-			
 			
 			try
 			{
