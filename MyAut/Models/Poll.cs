@@ -26,6 +26,14 @@ namespace MyAut.Models
 				if(Options!=null) return Options.Count;
 				return 0;
 			} }
+		public int VotesCount
+		{
+			get
+			{
+				if (Options != null) return Votes.Count;
+				return 0;
+			}
+		}
 		public Status Status
 		{
 			get
@@ -38,6 +46,15 @@ namespace MyAut.Models
 				
 				
 			}
+		}
+
+		public bool Validate()
+		{
+			if (Name.Length < 1) return false;
+			if (OptionsCount < 2) return false;
+			if (StartTime > EndTime) return false;
+			return true;
+
 		}
 	}
 }

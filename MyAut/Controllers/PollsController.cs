@@ -68,6 +68,7 @@ namespace Voting.Controllers
 			foreach(var pair in counts)
 			{
 				percentages[pair.Key] = (double)((double)(pair.Value) / total) * 100;
+				if (total == 0) percentages[pair.Key] = 0;
 			}
 
 			return View("Vote",Context.Polls.Where(p=>p.Id==id).FirstOrDefault());

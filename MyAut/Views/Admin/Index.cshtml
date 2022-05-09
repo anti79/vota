@@ -38,7 +38,7 @@ mog'sus
 				<td>@poll.Status.ToString()</td>
 				<td>@poll.StartTime.ToString()</td>
 				<td>@poll.EndTime.ToString()</td>
-				<td><a class="btn btn-primary" href="#" id="edit-btn">Редактировать</a> <a class="btn btn-danger delete-btn" href="#" data-name="@poll.Name" data-id="@poll.Id">Удалить</a></td>
+				<td><a class="btn btn-primary" href="/Admin/Edit/@poll.Id" id="edit-btn">Редактировать</a> <a class="btn btn-danger delete-btn" href="#" data-name="@poll.Name" data-id="@poll.Id">Удалить</a></td>
 			</tr>
 		}
 	</tbody>

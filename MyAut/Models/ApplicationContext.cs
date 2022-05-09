@@ -42,7 +42,10 @@ protected override void OnModelCreating(ModelBuilder builder)
 		public IQueryable<Poll> GetCurrent()
 		{
             var all = Polls;
-            return all.Where(p => (p.StartTime < DateTime.Now && p.EndTime > DateTime.Now )||(p.StartTime==null&&p.EndTime==null));
+            return all.Where(p => (p.StartTime < DateTime.Now && p.EndTime > DateTime.Now )||
+            (p.StartTime==null&&p.EndTime==null)||
+            (p.StartTime<DateTime.Now && p.EndTime==null)||
+            (p.EndTime>DateTime.Now&&p.StartTime==null));
 		}
         public IQueryable<Poll> GetOld()
         {

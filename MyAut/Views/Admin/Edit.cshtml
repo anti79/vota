@@ -1,54 +1,137 @@
-﻿@*@*
+﻿@*
 	For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
 @{
 }
+@model Poll
+<style>
+	.close-btn {
+		position: absolute;
+		top: 0;
+		right: 5px;
+	}
 
+	#options-list {
+		list-style: none;
+	}
+</style>
+<div class="alert alert-danger" role="alert" id="alert" style="display:none;">
+	еггог
+</div>
 <form method="post" asp-action="CreateSave">
 	<h1>Информация</h1>
 	<div class="mb-3">
-		<label for="Name" class="form-label">Название</label><input class="form-control" name="Name" />
-		<label for="Description" class="form-label">Описание</label><textarea class="form-control" name="Description"></textarea>
-		<label for="StartTime" class="form-label">Начало голосования</label><input class="form-control" name="StartTime" type="datetime-local" />
-		<label for="EndTime" class="form-label">Конец голосования</label><input class="form-control" name="EndTime" type="datetime-local" />
-	</div>s
+		<label for="Name" class="form-label">Название</label><input class="form-control" name="Name" id="name-input" value="@Model.Name"/>
+		<label for="Description" class="form-label">Описание</label><textarea class="form-control" name="Description" id="desc-input" value="@Model.Description"></textarea>
+		<label for="StartTime" class="form-label">Начало голосования</label><input class="form-control" name="StartTime" type="datetime-local" id="start-input" value="@Model.StartTime"/>
+		<label for="EndTime" class="form-label">Конец голосования</label><input class="form-control" name="EndTime" type="datetime-local" id="end-input" value="@Model.EndTime"/>
+	</div>
 
 
 
 
 	<h1>Варианты</h1>
-	<button class="btn btn-primary" id="add-option-btn">Добавить вариант</button>
-	<ul class="list-group" id="options-list">
+	<button class="btn btn-primary mb-3" id="add-option-btn">Добавить вариант</button>
+	<ul class="list-group mb-3" id="options-list">
 	</ul>
-
-	<input type="submit" class="btn btn-success" id="save-btn" value="Сохранить голосование" asp-controller="Admin" asp-action="CreateSave" />
-	<input type="hidden" value="0" id="OptionsCount" name="OptionsCount" />
+	<div class="text-right">
+		<input type="submit" class="btn btn-success" id="save-btn" value="Сохранить голосование" asp-controller="Admin" asp-action="EditSave" />
+		<input type="hidden" value="0" id="OptionsCount" name="OptionsCount" />
+		<input type="hidden" value="@Model.Id" id="PollId" name="PollId" />
+	</div>
 
 </form>
 <script>
-	var options = 0;
+	function error(msg) {
+		$("#alert").show();
+		$("#alert").text(msg);
+	}
+	function removeError() {
+		$("#alert").hide();
+	}
+	function setNames() {
+		let coll1 = $("#options-list .name-input");
+		let coll2 = $("#options-list .desc-input");
+		for (let i = 0; i < coll1.length; i++) {
+			coll1[i].setAttribute("name", "name" + i.toString());
+		}
+		for (let i = 0; i < coll2.length; i++) {
+			coll2[i].setAttribute("name", "description" + i.toString());
+		}
+		return coll1.length;
+	}
+	function validate() {
+		let valid = true;
+		if ($("#name-input").val().length == 0) {
+			valid = false;
+			error("Пустое название");
+		}
+		if ($("startTime").val() > $("endTime").val()) {
+			valid = false;
+			error("Некорректные даты");
+		}
+		if (setNames() < 2) {
+			valid = false;
+			error("Минимум два варианта");
+		}
+		if (valid) removeError();
+		return valid;
+	}
 	$(document).ready(function () {
 
+		$("#name-input").keyup(validate);
+		$("#start-input").keyup(validate);
+		$("#end-input").keyup(validate);
 
+		$("#save-btn").click((event) => {
+
+			if (!validate()) event.preventDefault();
+		});
+
+
+		function makeOption(name="",desc="") {
+			return `
+			<li><div class="container card list-group-item mt-2 mb-2" >
+				<button type="button" class="btn btn-outline close-btn">×</button>
+				<div class="row mt-3 mb-3 ml-2 mr-2">
+					<div class="col-sm-9">
+						<input class="mt-3 mb-3 form-control name-input" placeholder="Название" value="`+name+`" />
+						<textarea class="text-muted small form-control desc-input" placeholder="Описание" value="`+desc+`"></textarea>
+					</div>
+				</div>
+			</div></li>
+		`
+		}
 
 		$("#add-option-btn").click((event) => {
 
-			let option = `
-			<div class="container card list-group-item mt-2 mb-2" >
-				<div class="row mt-3 mb-3 ml-2 mr-2">
-					<div class="col-sm-9">
-						<input class="mt-3 mb-3 form-control" placeholder='Название' name="name`+ options.toString() + `"/>
-						<textarea class="text-muted small form-control" placeholder='Описание' name="description`+ options.toString() + `"></textarea>
-					</div>
-				</div>
-			</div >
-		`;
+			let option = makeOption();
+
+
 
 			event.preventDefault();
-			$("#options-list").append("<li>" + option + "</li>");
-			options++;
-			$("#OptionsCount").val(options);
+			$("#options-list").append(option);
+			$("#OptionsCount").val(setNames());
+			$(".close-btn").click((event) => {
+				console.log("deleting option");
+				event.preventDefault();
+				document.removeChild($(event.target.parentNode.parentNode).remove());
+
+			});
 		});
+		@foreach(Option option in Model.Options)
+		{
+			<text>
+			$("#options-list").append(makeOption("@option.Name", "@option.Description"));
+			</text>
+		}
+		$(".close-btn").click((event) => {
+			console.log("deleting option");
+			event.preventDefault();
+			document.removeChild($(event.target.parentNode.parentNode).remove());
+
+		});
+		$("#OptionsCount").val(setNames());
 	});
 
 </script>

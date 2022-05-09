@@ -3,12 +3,12 @@
 *@
 @{
 }
-@*
+
 @if (ViewBag.Polls.Count == 0)
 {
 	<h1>Нет текущих голосований</h1>
 }
-	*@
+
 @foreach (Poll poll in ViewBag.Polls)
 {
 	<partial name="_PollPartial" model="poll" />

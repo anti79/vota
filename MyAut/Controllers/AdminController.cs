@@ -43,6 +43,8 @@ namespace MyAut.Controllers
 			if (data["StartTime"] != null) poll.StartTime = DateTime.Parse(data["StartTime"]);
 			if (data["EndTime"] != null) poll.EndTime = DateTime.Parse(data["EndTime"]);
 
+			if(!poll.Validate()) return BadRequest();
+
 			context.Polls.Add(poll);
 			context.SaveChanges();
 			return RedirectToAction("Index");
@@ -54,13 +56,44 @@ namespace MyAut.Controllers
 			
 			try
 			{
-				poll.Options.RemoveRange(0, poll.OptionsCount);
+				poll.Options.RemoveAll(x => true);
+				poll.Votes.RemoveAll(x => true);
 			}
 			catch
 			{
 
 			}
 			context.Polls.Remove(poll);
+			context.SaveChanges();
+			return RedirectToAction("Index");
+		}
+
+
+		[HttpGet("Admin/Edit/{id}")]
+		public IActionResult Edit(int id)
+		{
+			var poll = context.Polls.Where(p => p.Id == id).FirstOrDefault();
+			return View("Edit", poll);
+		}
+		[HttpPost]
+		public IActionResult EditSave(IDictionary<string, string> data)
+		{
+			var poll = context.Polls.Where(p => p.Id == int.Parse(data["PollId"])).FirstOrDefault();
+			poll.Options.RemoveRange(0, poll.OptionsCount);
+			for (int i = 0; i < int.Parse(data["OptionsCount"]); i++)
+			{
+				poll.Options.Add(new Option() { Name = data["name" + i.ToString()], Description = data["description" + i.ToString()] });
+			}
+
+			poll.Name = data["Name"];
+			poll.Description = data["Description"];
+
+			if (data["StartTime"] != null) poll.StartTime = DateTime.Parse(data["StartTime"]);
+			if (data["EndTime"] != null) poll.EndTime = DateTime.Parse(data["EndTime"]);
+
+			if (!poll.Validate()) return BadRequest();
+
+			context.Polls.Update(poll);
 			context.SaveChanges();
 			return RedirectToAction("Index");
 		}

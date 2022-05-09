@@ -77,9 +77,12 @@ namespace MyAut.Controllers
 
                     var us = await _signInManager.UserManager.FindByNameAsync(model.Username);
                     var userRoles = await _userManager.GetRolesAsync(us);
-                    if (userRoles[0] == "Admin")
+                    if (userRoles.Count > 0)
                     {
-                        return RedirectToAction("Index", "Admin");
+                        if (userRoles[0] == "Admin")
+                        {
+                            return RedirectToAction("Index", "Admin");
+                        }
                     }
 
 
