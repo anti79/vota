@@ -19,7 +19,48 @@
 		<div class="col-md-8">
 			<div class="card-body">
 				<p class="card-text">@Model.Description</p>
-				
+				@if (Model.Status == Status.Active)
+				{
+					@if (Model.EndTime != null || Model.StartTime != null)
+					{
+						@if (Model.StartTime != null)
+						{
+							<p class="text-muted small">Начато @Model.StartTime</p>
+						}
+						@if (Model.EndTime != null)
+						{
+							<p class="text-muted small">Заканчивается @Model.EndTime</p>
+						}
+
+					}
+					else
+					{
+						<p>Без срока</p>
+					}
+				}
+				else if (Model.Status == Status.Over)
+				{
+					@if (Model.StartTime != null)
+					{
+						<p class="text-muted small">Начато @Model.StartTime</p><br />
+					}
+					@if (Model.EndTime != null)
+					{
+						<p class="text-muted small">Завершено @Model.EndTime</p>
+					}
+				}
+				else
+				{
+					@if (Model.StartTime != null)
+					{
+						<p class="text-muted small">Начнётся @Model.StartTime</p><br />
+					}
+					@if (Model.EndTime != null)
+					{
+						<p class="text-muted small">Закончится @Model.EndTime</p>
+					}
+				}
+
 
 			</div>
 
@@ -27,6 +68,13 @@
 
 	</div>
 	<div class="text-right mb-3 mr-3">
-		<a href="/Polls/Vote/@Model.Id" class="btn btn-primary">Проголосовать</a>
+		@if (Model.Status == Status.Active)
+		{
+			<a href="/Polls/Vote/@Model.Id" class="btn btn-primary">Проголосовать</a>
+		}
+		else
+		{
+			<a href="/Polls/Vote/@Model.Id" class="btn btn-primary">Перейти</a>
+		}
 	</div>
 </div>

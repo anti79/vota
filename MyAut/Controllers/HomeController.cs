@@ -23,7 +23,7 @@ namespace MyAut.Controllers
 
         public IActionResult Index()
         {
-            ViewBag.Current = context.Polls.Count();
+            ViewBag.Current = context.GetCurrent().Count();
             ViewBag.Total = context.Polls.Count();
             ViewBag.Users = context.Users.Count();
             return View();

@@ -79,10 +79,13 @@ namespace MyAut.Controllers
 		public IActionResult EditSave(IDictionary<string, string> data)
 		{
 			var poll = context.Polls.Where(p => p.Id == int.Parse(data["PollId"])).FirstOrDefault();
-			poll.Options.RemoveRange(0, poll.OptionsCount);
 			for (int i = 0; i < int.Parse(data["OptionsCount"]); i++)
 			{
-				poll.Options.Add(new Option() { Name = data["name" + i.ToString()], Description = data["description" + i.ToString()] });
+				var namei = "name" + i.ToString();
+				var desci = "description" + i.ToString();
+				poll.Options[i].Name = data[namei];
+				poll.Options[i].Description = data[desci];
+
 			}
 
 			poll.Name = data["Name"];

@@ -33,6 +33,7 @@ namespace Voting.Controllers
 
 			var list = Context.GetOld().ToList();
 			ViewBag.Polls = list;
+			ViewBag.Status = Status.Over;
 			return View("Old");
 		}
 		public IActionResult Future()
@@ -43,7 +44,7 @@ namespace Voting.Controllers
 			return View("Future");
 		}
 		[HttpGet("Polls/Vote/{id}")]
-		public IActionResult Index(int id)
+		public IActionResult Vote(int id)
 		{
 			if (id == 0) return Old();
 			string userId = userManager.GetUserId(User);
@@ -57,7 +58,7 @@ namespace Voting.Controllers
 			Dictionary<int, int> counts = new(); //move to db logic
 			Dictionary<int, double> percentages = new();  //optionId - value
 			int total = poll.Votes.Count();
-
+			ViewBag.Status = poll.Status;
 			foreach(Option option in poll.Options)
 			{
 				counts[option.Id] = poll.Votes.Where(v => v.OptionId == option.Id).Count();
@@ -65,9 +66,13 @@ namespace Voting.Controllers
 			ViewBag.Total = total;
 			ViewBag.Counts = counts;
 			ViewBag.Percentages = percentages;
+			if (poll.Status == Status.Over) {
+				var max = counts.FirstOrDefault(x => x.Value.Equals(counts.Values.Max()));
+				if(counts.Where(x => x.Value.Equals(max.Value)).Count()==1) ViewBag.WonId = max.Key;
+					}
 			foreach(var pair in counts)
 			{
-				percentages[pair.Key] = (double)((double)(pair.Value) / total) * 100;
+				percentages[pair.Key] = Math.Round((double)((double)(pair.Value) / total) * 100);
 				if (total == 0) percentages[pair.Key] = 0;
 			}
 
@@ -77,12 +82,13 @@ namespace Voting.Controllers
 		public IActionResult CastVote(int optionId, int pollId)
 		{
 			string userId = userManager.GetUserId(User);
-			if (Context.UserHasVoted(userId,pollId))
+			var poll = Context.Polls.Where(p => p.Id == pollId).FirstOrDefault();
+			if (Context.UserHasVoted(userId,pollId) || poll.Status!=Status.Active)
 			{
-				return View("Error");
+				return BadRequest();
 			}
 			Vote vote = new Vote() { OptionId = optionId, UserId =  userId};
-			var poll = Context.Polls.Where(p => p.Id == pollId).FirstOrDefault();
+			
 			poll.Votes.Add(vote);
 			Context.SaveChanges();
 			return View("Success");
