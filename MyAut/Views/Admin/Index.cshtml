@@ -32,13 +32,15 @@
 				<td>@poll.Status.ToString()</td>
 				<td>@poll.StartTime.ToString()</td>
 				<td>@poll.EndTime.ToString()</td>
-				<td><a class="btn btn-primary mb-1" href="/Admin/Edit/@poll.Id" id="edit-btn">Редактировать</a> <a class="btn btn-danger delete-btn" href="#" data-name="@poll.Name" data-id="@poll.Id">Удалить</a></td>
+				<td><a class="btn btn-primary mb-1 d-flex" href="/Admin/Edit/@poll.Id" id="edit-btn">Редактировать</a> <a class="btn btn-danger delete-btn d-flex" href="#" data-name="@poll.Name" data-id="@poll.Id">Удалить</a></td>
 			</tr>
 		}
 	</tbody>
 </table>
-<a href="Admin/Create" class="btn btn-success">Создать новое голосование</a>
-
+<div class="d-flex justify-content-between">
+	<a href="/Admin/Create" class="btn btn-success">Создать новое голосование</a>
+	<a href="/Roles/UserList">Управление пользователями</a>
+</div>
 
 <div class="modal" tabindex="-1" id="delete-modal">
 	<div class="modal-dialog">

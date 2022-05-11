@@ -83,8 +83,10 @@ namespace MyAut.Controllers
 			{
 				var namei = "name" + i.ToString();
 				var desci = "description" + i.ToString();
+				var imgi = "img" + i.ToString();
 				poll.Options[i].Name = data[namei];
 				poll.Options[i].Description = data[desci];
+				poll.Options[i].Image = data[imgi];
 
 			}
 

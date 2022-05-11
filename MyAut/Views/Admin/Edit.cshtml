@@ -66,11 +66,15 @@
 	function setNames() {
 		let coll1 = $("#options-list .name-input");
 		let coll2 = $("#options-list .desc-input");
+		let coll3 = $("#options-list .img-input");
 		for (let i = 0; i < coll1.length; i++) {
 			coll1[i].setAttribute("name", "name" + i.toString());
 		}
 		for (let i = 0; i < coll2.length; i++) {
 			coll2[i].setAttribute("name", "description" + i.toString());
+		}
+		for (let i = 0; i < coll2.length; i++) {
+			coll3[i].setAttribute("name", "img" + i.toString());
 		}
 		return coll1.length;
 	}
@@ -109,14 +113,15 @@
 		});
 
 
-		function makeOption(name="",desc="") {
+		function makeOption(name="",desc="",img="") {
 			return `
 			<li><div class="container card list-group-item mt-2 mb-2" >
 				<button type="button" class="btn btn-outline close-btn">×</button>
 				<div class="row mt-3 mb-3 ml-2 mr-2">
 					<div class="col-sm-9">
 						<input class="mt-3 mb-3 form-control name-input" placeholder="Название" value="`+name+`" />
-						<textarea class="text-muted small form-control desc-input" placeholder="Описание">`+desc+`</textarea>
+						<textarea class="text-muted small form-control desc-input" placeholder="Описание">`+ desc +`</textarea>
+						<input class="mt-3 mb-3 form-control img-input" placeholder="Адрес картинки" value="`+ img +`" />
 					</div>
 				</div>
 			</div></li>
@@ -142,7 +147,7 @@
 		@foreach(Option option in Model.Options)
 		{
 			<text>
-			$("#options-list").append(makeOption("@option.Name", "@option.Description"));
+			$("#options-list").append(makeOption("@option.Name", "@option.Description", "@option.Image"));
 			</text>
 		}
 		$(".close-btn").click((event) => {

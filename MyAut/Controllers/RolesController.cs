@@ -85,7 +85,7 @@ namespace MyAut.Controllers
             {
                 // получем список ролей пользователя
                 var userRoles = await _userManager.GetRolesAsync(user);
-                if (userRoles[0] == "admin")
+                if (userRoles.Count>0 && userRoles[0] == "Admin")
                 {
                     return View("TestRole", userRoles[0]);
                 }
