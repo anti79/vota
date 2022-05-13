@@ -37,7 +37,8 @@ namespace MyAut.Controllers
 			{
 				Name = data["Name"],
 				Description = data["Description"],
-				Options = options
+				Options = options,
+				Image = data["Image"]
 			};
 
 			if (data["StartTime"] != null) poll.StartTime = DateTime.Parse(data["StartTime"]);
@@ -79,7 +80,11 @@ namespace MyAut.Controllers
 		public IActionResult EditSave(IDictionary<string, string> data)
 		{
 			var poll = context.Polls.Where(p => p.Id == int.Parse(data["PollId"])).FirstOrDefault();
-			for (int i = 0; i < int.Parse(data["OptionsCount"]); i++)
+			int count = int.Parse(data["OptionsCount"]);
+			if (poll.OptionsCount < count) {
+				for (int i = 0; i < count - poll.OptionsCount;i++) poll.Options.Add(new Option { });
+			}				
+			for (int i = 0; i < count; i++)
 			{
 				var namei = "name" + i.ToString();
 				var desci = "description" + i.ToString();
@@ -92,6 +97,7 @@ namespace MyAut.Controllers
 
 			poll.Name = data["Name"];
 			poll.Description = data["Description"];
+			poll.Image = data["Image"];
 
 			if (data["StartTime"] != null) poll.StartTime = DateTime.Parse(data["StartTime"]);
 			if (data["EndTime"] != null) poll.EndTime = DateTime.Parse(data["EndTime"]);

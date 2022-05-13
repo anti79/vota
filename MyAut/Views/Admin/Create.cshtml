@@ -19,10 +19,11 @@
 <form method="post" asp-action="CreateSave">
 	<h1>Информация</h1>
 	<div class="mb-3">
-		<label for="Name" class="form-label">Название</label><input class="form-control" name="Name" id="name-input"/>
+		<label for="Name" class="form-label">Название</label><input class="form-control" name="Name" id="name-input" />
 		<label for="Description" class="form-label">Описание</label><textarea class="form-control" name="Description" id="desc-input"></textarea>
-		<label for="StartTime" class="form-label">Начало голосования</label><input class="form-control"  step="any"  name="StartTime" type="datetime-local" id="start-input"/>
-		<label for="EndTime" class="form-label">Конец голосования</label><input class="form-control" name="EndTime" step="any" type="datetime-local" id="end-input"/>
+		<label for="Image" class="form-label">URL картинки</label><input class="form-control" name="Image" id="img-input" />
+		<label for="StartTime" class="form-label">Начало голосования</label><input class="form-control" step="any" name="StartTime" type="datetime-local" id="start-input" />
+		<label for="EndTime" class="form-label">Конец голосования</label><input class="form-control" name="EndTime" step="any" type="datetime-local" id="end-input" />
 	</div>
 
 
@@ -71,6 +72,14 @@
 			valid = false;
 			error("Минимум два варианта");
 		}
+		let coll1 = $("#options-list .name-input");
+		for (let i = 0; i < coll1.length; i++) {
+			let val = $(coll1[i]).val();
+			if (val=="") {
+				valid = false;
+				error("Все варианты должны иметь название");
+			}
+		}
 		if (valid) removeError();
 		return valid;
 	}
@@ -82,7 +91,7 @@
 	}
 	$(document).ready(function () {
 
-		$("#name-input").keyup(validate);
+		//$("#name-input").keyup(validate);
 		//$("#start-input").keyup(validate);
 		//$("#end-input").keyup(validate);
 

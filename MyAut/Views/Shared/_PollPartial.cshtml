@@ -9,72 +9,71 @@
 
 <div class="card mb-3">
 	<h1 class="card-header">@Model.Name</h1>
-	<div class="row g-0">
+	<div class="d-flex row ml-2">
 		@if (Model.Image != null)
 		{
-			<div class="col-md-4">
-				<img src="@Model.Image" class="img-fluid rounded-start" width="150" height="150">
-			</div>
-		}
-		<div class="col-md-8">
-			<div class="card-body">
-				<p class="card-text">@Model.Description</p>
-				@if (Model.Status == Status.Active)
-				{
-					@if (Model.EndTime != null || Model.StartTime != null)
-					{
-						@if (Model.StartTime != null)
-						{
-							<p class="text-muted small">Начато @Model.StartTime</p>
-						}
-						@if (Model.EndTime != null)
-						{
-							<p class="text-muted small">Заканчивается @Model.EndTime</p>
-						}
 
-					}
-					else
-					{
-						<p>Без срока</p>
-					}
-				}
-				else if (Model.Status == Status.Over)
+			<img src="@Model.Image" class="img-fluid rounded-start" width="150" height="150">
+			<div class="vr ml-2 mr-2" style="background-color: #dee2e6; width: 1px;"></div>
+
+		}
+		<div class="card-body">
+			<p class="card-text">@Model.Description</p>
+			@if (Model.Status == Status.Active)
+			{
+				@if (Model.EndTime != null || Model.StartTime != null)
 				{
 					@if (Model.StartTime != null)
 					{
-						<p class="text-muted small">Начато @Model.StartTime</p><br />
+						<p class="text-muted small">Начато @Model.StartTime</p>
 					}
 					@if (Model.EndTime != null)
 					{
-						<p class="text-muted small">Завершено @Model.EndTime</p>
+						<p class="text-muted small">Заканчивается @Model.EndTime</p>
 					}
+
 				}
 				else
 				{
-					@if (Model.StartTime != null)
-					{
-						<p class="text-muted small">Начнётся @Model.StartTime</p><br />
-					}
-					@if (Model.EndTime != null)
-					{
-						<p class="text-muted small">Закончится @Model.EndTime</p>
-					}
+					<p>Без срока</p>
 				}
+			}
+			else if (Model.Status == Status.Over)
+			{
+				@if (Model.StartTime != null)
+				{
+					<p class="text-muted small">Начато @Model.StartTime</p>
+				}
+				@if (Model.EndTime != null)
+				{
+					<p class="text-muted small">Завершено @Model.EndTime</p>
+				}
+			}
+			else
+			{
+				@if (Model.StartTime != null)
+				{
+					<p class="text-muted small">Начнётся @Model.StartTime</p>
+				}
+				@if (Model.EndTime != null)
+				{
+					<p class="text-muted small">Закончится @Model.EndTime</p>
+				}
+			}
 
-
-			</div>
 
 		</div>
-
+		<div class="text-right mb-3 mr-3 align-self-end mr-2">
+			@if (Model.Status == Status.Active)
+			{
+				<a href="/Polls/Vote/@Model.Id" class="btn btn-primary mr-3">Проголосовать</a>
+			}
+			else
+			{
+				<a href="/Polls/Vote/@Model.Id" class="btn btn-primary mr-3">Перейти</a>
+			}
+		</div>
 	</div>
-	<div class="text-right mb-3 mr-3">
-		@if (Model.Status == Status.Active)
-		{
-			<a href="/Polls/Vote/@Model.Id" class="btn btn-primary">Проголосовать</a>
-		}
-		else
-		{
-			<a href="/Polls/Vote/@Model.Id" class="btn btn-primary">Перейти</a>
-		}
-	</div>
+	
 </div>
+	
